@@ -1,0 +1,28 @@
+{
+  "name": "challenge-cubos",
+  "version": "1.0.0",
+  "description": "This is an API coded for Cubos Academy challenge",
+  "main": "app.js",
+  "scripts": {
+    "start" : "node app.js",
+    "dev" : "nodemon app",
+    "prod" : "SET NODE_ENV=production & nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafaelmachadorocha/challenge-cubos.git"
+  },
+  "author": "Rafael Rocha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafaelmachadorocha/challenge-cubos/issues"
+  },
+  "homepage": "https://github.com/rafaelmachadorocha/challenge-cubos#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  }
+}
