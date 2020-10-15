@@ -3,7 +3,7 @@ const { json } = require('express');
 const fs = require('fs');
 const filePath = 'schedules.json';
 const os = require('os');
-const { formatWithOptions } = require('util');
+const DateHelper = require('../helpers/dateHelper');
 
 class Schedule {
   
@@ -26,11 +26,11 @@ class Schedule {
 
   static create(body) {
     return new Promise((resolve, reject) => {
-      console.log(body)
-     const schedule = new Schedule(body);
-     if(schedule.save()) {
-       resolve("Schedule sucessfull created");
-     } else reject("Couldn't create schedule");
+    body.date = DateHelper.formatStringToDate(body.date);
+    const schedule = new Schedule(body);
+    if(schedule.save()) {
+      resolve("Schedule sucessfull created");
+    } else reject("Couldn't create schedule");
   });
 }
 
@@ -45,16 +45,16 @@ class Schedule {
     }
     body = JSON.stringify(body)
     if (!filePath) {
-      console.log("sem file")
       await fs.writeFile(filePath, body, (err) => {
         if (err) throw err;
       })
     } else {
-      console.log("com file")
       await fs.appendFile(filePath, body + os.EOL, (err) => {
         if (err) throw err;
       })
     }
   }
+
 } 
+
 module.exports = Schedule;
