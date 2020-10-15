@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/schedules', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'This route will display schedules'
-  });
-});
+const { getSchedules, newSchedule } = require('../controllers/schedulesController');
+
+router.route('/schedules').get(getSchedules);
+
+router.route('/schedules/new').post(newSchedule);
 
 module.exports = router;

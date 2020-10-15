@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 const dotenv = require('dotenv');
 
@@ -9,8 +10,8 @@ dotenv.config({path : './config/config.env'});
 //Importing routes
 const schedules = require('./routes/schedules');
 
-
-app.use(schedules);
+app.use(bodyParser.json());
+app.use('/api/v1', schedules);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

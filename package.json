@@ -4,9 +4,9 @@
   "description": "This is an API coded for Cubos Academy challenge",
   "main": "app.js",
   "scripts": {
-    "start" : "node app.js",
-    "dev" : "nodemon app",
-    "prod" : "SET NODE_ENV=production & nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app",
+    "prod": "SET NODE_ENV=production & nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/rafaelmachadorocha/challenge-cubos#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
