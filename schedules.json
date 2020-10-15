@@ -1,2 +1,1 @@
-
-{"date":"2020-10-15T03:00:00.000Z","interval":{"start":"14:30","end":"15:30"}}
+{"schedules":[{"frequency":"20-10-2015","interval":{"start":"14:30","end":"15:30"}}]}

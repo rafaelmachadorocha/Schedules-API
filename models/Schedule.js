@@ -8,53 +8,49 @@ const DateHelper = require('../helpers/dateHelper');
 class Schedule {
   
   constructor(attributes = {}){
-    this._id = Schedule.incrementId();
     this.slug = new String("");
-    this.date = new Date(attributes.date);
+    this.frequency = DateHelper.checkFrequency(attributes.frequency)
     this.interval = {
-      start :  new String(attributes.interval.start),
-      end :  new String(attributes.interval.end)
+      start : attributes.interval.start,
+      end : attributes.interval.end
     };
     
   }
 
-  static incrementId() {
-    if (!this.latestId) this.latestId = 1
-    else this.latestId++
-    return this.latestId
-  }
-
   static create(body) {
     return new Promise((resolve, reject) => {
-    body.date = DateHelper.formatStringToDate(body.date);
     const schedule = new Schedule(body);
     if(schedule.save()) {
-      resolve("Schedule sucessfull created");
+      resolve("Schedule sucessful created");
     } else reject("Couldn't create schedule");
   });
 }
 
   async save() {
-  
     let body = {
-      date : this.date,
+      frequency : this.frequency,
       interval : {
-        start : this.interval.start.normalize(),
-        end : this.interval.end.normalize()
+        start : this.interval.start,
+        end : this.interval.end
       }
     }
-    body = JSON.stringify(body)
-    if (!filePath) {
-      await fs.writeFile(filePath, body, (err) => {
-        if (err) throw err;
+    await fs.readFile(filePath, (error, content) => {
+      let data = JSON.parse(content);
+      if(!data.hasOwnProperty('schedules')) {
+        data['schedules'] = [];
+      }
+      if (data.schedules.length > 0) {
+        if (data.schedules.some((element) => { return element.frequency == body.frequency && element.interval.start == body.interval.start && element.interval.end == body.interval.end  })) {
+          console.log("schedule already exists");
+          return false;
+        }
+      }
+      data['schedules'].push(body)
+      const newData = JSON.stringify(data);
+      fs.writeFile(filePath, newData, () => {
       })
-    } else {
-      await fs.appendFile(filePath, body + os.EOL, (err) => {
-        if (err) throw err;
-      })
-    }
+    });
   }
-
 } 
 
 module.exports = Schedule;
