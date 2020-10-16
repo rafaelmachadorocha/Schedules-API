@@ -14,6 +14,6 @@ exports.newSchedule = async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: 'Schedule added',
-    data: schedule
+    schedule: schedule
   })
 }
