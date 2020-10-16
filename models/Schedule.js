@@ -10,12 +10,13 @@ class Schedule {
   constructor(attributes = {}){
     this._id = 1;
     this.frequency = attributes.frequency || "at this day"
-    this.day = this.frequency === "at this day" ? new Date(DateHelper.formatStringToDate(attributes.day)) : null;
+    this.day = Schedule.setDate(this.frequency, attributes.day)
     this.interval = {
       start : attributes.interval.start,
       end : attributes.interval.end
     };
   }
+
 
   static create(body) {
     return new Promise((resolve, reject) => {
@@ -46,13 +47,21 @@ class Schedule {
     });
   }
 
+  static setDate(frequency, date) {
+    if (frequency === "at this day") {
+      return new Date(DateHelper.formatStringToDate(date));
+    } else if (frequency === "weekly") {
+      return date;
+    } else return null;
+  }
+
   static checkDateInRange(data, begin, end) {
     const selectedSchedules = []
     const beginDate = new Date(DateHelper.formatStringToDate(begin));
     const endDate = new Date(DateHelper.formatStringToDate(end));
     data.forEach((element) => {
 
-      if (element.day) {
+      if (element.frequency === 'at this day') {
         element.day = new Date(element.day);
         if (element.day <= endDate && element.day >= beginDate) {
           selectedSchedules.push(element)
@@ -94,7 +103,7 @@ class Schedule {
           }
           const scheduleExists = element =>{
             return ((element.frequency !== "at this day" && element.frequency === body.frequency) || 
-                     DateHelper.formatDateToString(new Date(element.day)) === DateHelper.formatDateToString(body.day)) && 
+                     (DateHelper.formatDateToString(new Date(element.day)) === DateHelper.formatDateToString(body.day)) || body.day === element.day) && 
                      element.interval.start === body.interval.start && 
                      element.interval.end === body.interval.end
 
