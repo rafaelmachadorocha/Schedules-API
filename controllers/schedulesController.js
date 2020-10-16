@@ -24,16 +24,27 @@ exports.newSchedule = async (req, res, next) => {
   })
 }
 
+
+
 //Search for avaiable schedules within range => /api/v1/schedules/:begin/:end
 exports.getScheduleWithinRange = async (req, res, next) => {
   const { begin, end } = req.params
   const scheduleRules = await Schedule.find(begin, end)
-  const schedules = {};
- 
-  
+  const schedules = [];
+
+  scheduleRules.forEach(function (rule) {
+    const formattedDate = DateHelper.formatDateToString(rule.day);
+    if (!schedules.some(element => element['day'] === formattedDate)) {
+      schedules.push({ day: formattedDate, intervals: [{ "start": rule.interval.start, "end": rule.interval.end }] });
+    } else {
+      const selectedElement = schedules.find(element => element['day'] === formattedDate);
+      selectedElement.intervals.push({ start: rule.interval.start, end: rule.interval.end });
+    }
+    });
+
   res.status(200).json({
     success: true,
-    results: scheduleRules.length,
-    "available-schedules": scheduleRules
+    results: schedules.length,
+    "available-schedules": schedules
   });
 }
