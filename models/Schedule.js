@@ -29,7 +29,7 @@ class Schedule {
     return new Promise((resolve, reject) => {
       const schedule = new Schedule(body);
       if(schedule.save()) {
-        resolve("Schedule sucessful created");
+        resolve(body);
       } else reject("Couldn't create schedule");
   });
  }
@@ -47,7 +47,7 @@ class Schedule {
     return true
   }
 
-  formatData(body) {
+  async formatData(body) {
     fs.readFile(filePath, 'utf-8', (err, data) => {
       if (data === undefined) {
         let newData = {};

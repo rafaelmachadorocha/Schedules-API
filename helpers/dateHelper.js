@@ -15,8 +15,8 @@ class DateHelper {
   }
 
   static checkFrequency(frequency) {
-    if (!['daily', 'weekly'].includes(frequency)) return frequency;
-    return new Date(formatStringToDate(frequency));
+    if (['daily', 'weekly'].includes(frequency)) return frequency;
+    return new Date(DateHelper.formatStringToDate(frequency));
   }
 
 }
