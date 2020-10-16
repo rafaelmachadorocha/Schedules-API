@@ -8,7 +8,7 @@ const DateHelper = require('../helpers/dateHelper');
 class Schedule {
   
   constructor(attributes = {}){
-    this.id = 1;
+    this._id = 1;
     this.frequency = DateHelper.checkFrequency(attributes.frequency)
     this.interval = {
       start : attributes.interval.start,
@@ -36,7 +36,7 @@ class Schedule {
 
   save() {
     let body = {
-      id : 1,
+      _id : 1,
       frequency : this.frequency,
       interval : {
         start : this.interval.start,
@@ -51,7 +51,7 @@ class Schedule {
     fs.readFile(filePath, 'utf-8', (err, data) => {
       if (data === undefined) {
         let newData = {};
-        body.id = 1;
+        body._id = 1;
         newData['schedules'] = [];
         newData['schedules'].push(body);
         newData = JSON.stringify(newData)
@@ -69,7 +69,7 @@ class Schedule {
             throw new Error("Schedule already exists");
           }
           const schedules =  newData['schedules']
-          body.id = schedules[schedules.length - 1].id + 1
+          body._id = schedules[schedules.length - 1]._id + 1
           newData['schedules'].push(body)
           newData = JSON.stringify(newData)
           fs.writeFile(filePath, newData, (err) => {
