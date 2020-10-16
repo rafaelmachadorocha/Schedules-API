@@ -10,7 +10,7 @@ class Schedule {
   constructor(attributes = {}){
     this._id = 1;
     this.frequency = attributes.frequency || "at this day"
-    this.day = (this.frequency === "at this day" ? new Date(DateHelper.formatStringToDate(attributes.day)) : null);
+    this.day = this.frequency === "at this day" ? new Date(DateHelper.formatStringToDate(attributes.day)) : null;
     this.interval = {
       start : attributes.interval.start,
       end : attributes.interval.end
@@ -51,9 +51,10 @@ class Schedule {
     const beginDate = new Date(DateHelper.formatStringToDate(begin));
     const endDate = new Date(DateHelper.formatStringToDate(end));
     data.forEach((element) => {
-      if (element.frequency !== 'daily' && element.frequency !== 'weekly') {
-        element.frequency = new Date(element.frequency);
-        if (element.frequency <= endDate && element.frequency >= beginDate) {
+
+      if (element.day) {
+        element.day = new Date(element.day);
+        if (element.day <= endDate && element.day >= beginDate) {
           selectedSchedules.push(element)
         }
       }
@@ -91,9 +92,14 @@ class Schedule {
           if(!newData.hasOwnProperty('schedules')) {
             newData['schedules'] = [];
           }
-          const scheduleExists = element => (element.frequency === body.frequency || element.day === body.day) && 
-                                            element.interval.start === body.interval.start && 
-                                            element.interval.end === body.interval.end
+          const scheduleExists = element =>{
+            return ((element.frequency !== "at this day" && element.frequency === body.frequency) || 
+                     DateHelper.formatDateToString(new Date(element.day)) === DateHelper.formatDateToString(body.day)) && 
+                     element.interval.start === body.interval.start && 
+                     element.interval.end === body.interval.end
+
+
+          } 
           
           if (newData.schedules.length > 0 && newData.schedules.some(scheduleExists)) {
             throw new Error("Schedule already exists");

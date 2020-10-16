@@ -1,1 +1,1 @@
-{"schedules":[{"_id":1,"frequency":"weekly","day":null,"interval":{"start":"18:30","end":"15:30"}},{"_id":2,"frequency":"at this day","day":"2020-10-20T03:00:00.000Z","interval":{"start":"18:30","end":"15:30"}}]}
+{"schedules":[{"_id":1,"frequency":"weekly","day":null,"interval":{"start":"18:30","end":"15:30"}},{"_id":2,"frequency":"at this day","day":"2020-10-22T03:00:00.000Z","interval":{"start":"18:30","end":"15:30"}}]}
