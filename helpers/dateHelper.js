@@ -7,9 +7,10 @@ class DateHelper {
   }
   
   static formatDateToString(date) {
-    if (date){
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    if (!days.includes(date) && date !== null){
       return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}` 
-    } else return null
+    } else return date || null
   }
 
   static formatStringToDate(string) {
@@ -17,8 +18,6 @@ class DateHelper {
   }
 
 }
-
-
 
 
 module.exports = DateHelper;
