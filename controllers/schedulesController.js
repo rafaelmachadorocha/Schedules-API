@@ -40,6 +40,6 @@ exports.getScheduleWithinRange = async (req, res, next) => {
   res.status(200).json({
     success: true,
     results: formattedSchedules.length,
-    "avaiable-schedules": formattedSchedules
+    "available-schedules": formattedSchedules
   });
 }
