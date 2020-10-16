@@ -28,18 +28,9 @@ exports.getScheduleWithinRange = async (req, res, next) => {
   const { begin, end } = req.params
   
   const schedules = await Schedule.find(begin, end)
-  const formattedSchedules = schedules.map((element) => {
-    if (typeof(element.frequency) === 'object') {
-      element.frequency = DateHelper.formatDateToString(element.frequency);
-      return {
-        day: element.frequency,
-        interval: {start: element.interval.start, end: element.interval.end}
-      }
-    }
-  }) 
   res.status(200).json({
     success: true,
-    results: formattedSchedules.length,
-    "available-schedules": formattedSchedules
+    results: schedules.length,
+    "available-schedules": schedules
   });
 }
