@@ -1,6 +1,6 @@
 const Schedule = require('../models/Schedule')
 const DateHelper = require('../helpers/dateHelper');
-const lodash = require('lodash')
+const ScheduleHelper = require('../helpers/scheduleHelper');
 
 // Get schedule rules => /api/v1/schedules
 exports.getSchedules = async (req, res, next) => {
@@ -10,6 +10,18 @@ exports.getSchedules = async (req, res, next) => {
     success: true,
     results: availableSchedules.length,
     schedules: availableSchedules
+  });
+}
+
+//Search for avaiable schedules within range => /api/v1/schedules/:begin/:end
+exports.getScheduleWithinRange = async (req, res, next) => {
+  const { begin, end } = req.params
+  const scheduleRules = await Schedule.find(begin, end)
+  const schedules = ScheduleHelper.filterAvailableSchedules(scheduleRules);
+  res.status(200).json({
+    success: true,
+    results: schedules.length,
+    "available-schedules": schedules
   });
 }
 
@@ -24,27 +36,21 @@ exports.newSchedule = async (req, res, next) => {
   })
 }
 
+//Delete an specific schedule rule => api/v1/job/:id
+exports.deleteSchedule = async (req, res, next) => {
+  let schedule = await Schedule.findByIdAndDelete(req.params.id)
+  if(!schedule) {
+    return res.status(404).js({
+      success: false,
+      message: 'Schedule not found.'
+    })
+  }
 
-
-//Search for avaiable schedules within range => /api/v1/schedules/:begin/:end
-exports.getScheduleWithinRange = async (req, res, next) => {
-  const { begin, end } = req.params
-  const scheduleRules = await Schedule.find(begin, end)
-  const schedules = [];
-
-  scheduleRules.forEach(function (rule) {
-    const formattedDate = DateHelper.formatDateToString(rule.day);
-    if (!schedules.some(element => element['day'] === formattedDate)) {
-      schedules.push({ day: formattedDate, intervals: [{ "start": rule.interval.start, "end": rule.interval.end }] });
-    } else {
-      const selectedElement = schedules.find(element => element['day'] === formattedDate);
-      selectedElement.intervals.push({ start: rule.interval.start, end: rule.interval.end });
-    }
-    });
-
+  //schedule = await schedule.remove()
   res.status(200).json({
     success: true,
-    results: schedules.length,
-    "available-schedules": schedules
-  });
+    message: 'Schedule is deleted',
+    removedSchedule: schedule
+  })
 }
+

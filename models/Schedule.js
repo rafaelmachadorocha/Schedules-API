@@ -1,8 +1,6 @@
-//const slugify = require('slugify');
-const { json } = require('express');
+const { json } = require('body-parser');
 const fs = require('fs');
 const filePath = 'schedules.json';
-const os = require('os');
 const DateHelper = require('../helpers/dateHelper');
 
 class Schedule {
@@ -12,8 +10,8 @@ class Schedule {
     this.frequency = attributes.frequency || "at this day"
     this.day = Schedule.setDate(this.frequency, attributes.day)
     this.interval = {
-      start : attributes.interval.start,
-      end : attributes.interval.end
+      start: attributes.interval.start,
+      end: attributes.interval.end
     };
   }
 
@@ -27,6 +25,7 @@ class Schedule {
   });
  }
 
+
   static find(begin = null, end = null) {
     return new Promise((resolve, reject) => {
         if (!begin || !end){
@@ -34,17 +33,39 @@ class Schedule {
             if (data !== undefined) {
               const newData = JSON.parse(data);
               resolve(newData.schedules);
-            } else reject ([]);
+            } 
+            reject ([]);
           })
         } else {
           fs.readFile(filePath, 'utf-8', (err, data) => {
             if (data !== undefined) {
               const newData = JSON.parse(data)
               resolve(Schedule.checkDateInRange(newData.schedules, begin, end))
-            } else reject([])
+            } 
+            reject([])
           })
         }
     });
+  }
+
+  static findByIdAndDelete(id) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, 'utf-8', (err, data) => {
+        if (data === undefined) {
+          reject(undefined);
+        }
+        const obj = JSON.parse(data);
+        const { schedules } = obj;
+        const schedule = schedules.find(element => element._id.toString() === id);
+        const index = schedules.indexOf(schedule);
+        const removedSchedule = schedules.splice(index, 1);
+        const newData = JSON.stringify(schedules);
+        fs.writeFile(filePath, newData, (err) => {
+          if (err) throw err;
+          resolve(removedSchedule);
+        })
+      });
+    })
   }
 
   static setDate(frequency, date) {
@@ -52,7 +73,7 @@ class Schedule {
       return new Date(DateHelper.formatStringToDate(date));
     } else if (frequency === "weekly") {
       return date;
-    } else return null;
+    } return null;
   }
 
   static checkDateInRange(data, begin, end) {
@@ -73,12 +94,12 @@ class Schedule {
 
   save() {
     let body = {
-      _id : 1,
+      _id: 1,
       frequency : this.frequency,
-      day : this.day,
-      interval : {
-        start : this.interval.start,
-        end : this.interval.end
+      day: this.day,
+      interval: {
+        start: this.interval.start,
+        end: this.interval.end
       }
     }
     this.formatData(body);
