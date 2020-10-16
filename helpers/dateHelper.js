@@ -14,13 +14,6 @@ class DateHelper {
     return string.split('-').reverse();
   }
 
-  static checkFrequency(frequency) {
-    if (['daily', 'weekly'].includes(frequency)) return frequency;
-    const newDate = DateHelper.formatStringToDate(frequency)
-    console.log(newDate)
-    return new Date(newDate);
-  }
-
 }
 
 

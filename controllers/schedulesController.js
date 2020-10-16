@@ -1,5 +1,6 @@
 const Schedule = require('../models/Schedule')
 const DateHelper = require('../helpers/dateHelper');
+const lodash = require('lodash')
 
 // Get schedule rules => /api/v1/schedules
 exports.getSchedules = async (req, res, next) => {
@@ -26,11 +27,13 @@ exports.newSchedule = async (req, res, next) => {
 //Search for avaiable schedules within range => /api/v1/schedules/:begin/:end
 exports.getScheduleWithinRange = async (req, res, next) => {
   const { begin, end } = req.params
+  const scheduleRules = await Schedule.find(begin, end)
+  const schedules = {};
+ 
   
-  const schedules = await Schedule.find(begin, end)
   res.status(200).json({
     success: true,
-    results: schedules.length,
-    "available-schedules": schedules
+    results: scheduleRules.length,
+    "available-schedules": scheduleRules
   });
 }

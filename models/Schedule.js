@@ -9,13 +9,12 @@ class Schedule {
   
   constructor(attributes = {}){
     this._id = 1;
-    this.frequency = DateHelper.checkFrequency(attributes.frequency)
+    this.frequency = attributes.frequency || "at this day"
+    this.day = (this.frequency === "at this day" ? new Date(DateHelper.formatStringToDate(attributes.day)) : null);
     this.interval = {
       start : attributes.interval.start,
       end : attributes.interval.end
     };
-    console.log(attributes.frequency)
-    console.log(this.frequency)
   }
 
   static create(body) {
@@ -66,6 +65,7 @@ class Schedule {
     let body = {
       _id : 1,
       frequency : this.frequency,
+      day : this.day,
       interval : {
         start : this.interval.start,
         end : this.interval.end
@@ -91,7 +91,7 @@ class Schedule {
           if(!newData.hasOwnProperty('schedules')) {
             newData['schedules'] = [];
           }
-          const scheduleExists = element => element.frequency === body.frequency && 
+          const scheduleExists = element => (element.frequency === body.frequency || element.day === body.day) && 
                                             element.interval.start === body.interval.start && 
                                             element.interval.end === body.interval.end
           
