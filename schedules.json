@@ -1,1 +1,1 @@
-{"schedules":[{"frequency":"20-10-2015","interval":{"start":"14:30","end":"15:30"}}]}
+{"schedules":[{"id":1,"frequency":"20-10-2015","interval":{"start":"14:30","end":"15:30"}},{"id":2,"frequency":"20-11-2015","interval":{"start":"14:30","end":"15:30"}}]}
