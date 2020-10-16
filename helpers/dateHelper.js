@@ -7,7 +7,7 @@ class DateHelper {
   }
   
   static formatDateToString(date) {
-
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}` 
   }
 
   static formatStringToDate(string) {
@@ -16,7 +16,9 @@ class DateHelper {
 
   static checkFrequency(frequency) {
     if (['daily', 'weekly'].includes(frequency)) return frequency;
-    return new Date(DateHelper.formatStringToDate(frequency));
+    const newDate = DateHelper.formatStringToDate(frequency)
+    console.log(newDate)
+    return new Date(newDate);
   }
 
 }

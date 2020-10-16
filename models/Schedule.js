@@ -14,7 +14,8 @@ class Schedule {
       start : attributes.interval.start,
       end : attributes.interval.end
     };
-    
+    console.log(attributes.frequency)
+    console.log(this.frequency)
   }
 
   static create(body) {
@@ -26,18 +27,40 @@ class Schedule {
   });
  }
 
- static find(params = null) {
-  return new Promise((resolve, reject) => {
-      if (!params){
-        fs.readFile(filePath, 'utf8', (err, data) => {
-          if (data !== undefined) {
-            const newData = JSON.parse(data);
-            resolve(newData.schedules);
-          } else reject ([]);
-        })
+  static find(begin = null, end = null) {
+    return new Promise((resolve, reject) => {
+        if (!begin || !end){
+          fs.readFile(filePath, 'utf8', (err, data) => {
+            if (data !== undefined) {
+              const newData = JSON.parse(data);
+              resolve(newData.schedules);
+            } else reject ([]);
+          })
+        } else {
+          fs.readFile(filePath, 'utf-8', (err, data) => {
+            if (data !== undefined) {
+              const newData = JSON.parse(data)
+              resolve(Schedule.checkDateInRange(newData.schedules, begin, end))
+            } else reject([])
+          })
+        }
+    });
+  }
+
+  static checkDateInRange(data, begin, end) {
+    const selectedSchedules = []
+    const beginDate = new Date(DateHelper.formatStringToDate(begin));
+    const endDate = new Date(DateHelper.formatStringToDate(end));
+    data.forEach((element) => {
+      if (element.frequency !== 'daily' && element.frequency !== 'weekly') {
+        element.frequency = new Date(element.frequency);
+        if (element.frequency <= endDate && element.frequency >= beginDate) {
+          selectedSchedules.push(element)
+        }
       }
-  });
-}
+    })
+    return selectedSchedules;
+  }
 
   save() {
     let body = {
@@ -50,14 +73,6 @@ class Schedule {
     }
     this.formatData(body);
     return true
-  }
-
-  static async setId() {
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-      if (data === undefined) {
-        return 1
-      }
-    });
   }
 
   async formatData(body) {
