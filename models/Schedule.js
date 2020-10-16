@@ -26,14 +26,16 @@ class Schedule {
   });
  }
 
- static find() {
+ static find(params = null) {
   return new Promise((resolve, reject) => {
-      fs.readFile(filePath, 'utf8', (err, data) => {
-        if (data !== undefined) {
-          const newData = JSON.parse(data);
-          resolve(newData.schedules);
-        } else reject ([]);
-      })
+      if (!params){
+        fs.readFile(filePath, 'utf8', (err, data) => {
+          if (data !== undefined) {
+            const newData = JSON.parse(data);
+            resolve(newData.schedules);
+          } else reject ([]);
+        })
+      }
   });
 }
 
@@ -74,9 +76,11 @@ class Schedule {
           if(!newData.hasOwnProperty('schedules')) {
             newData['schedules'] = [];
           }
-          if (newData.schedules.length > 0 && newData.schedules.some((element) => { return element.frequency == body.frequency 
-          && element.interval.start == body.interval.start 
-          && element.interval.end == body.interval.end  })) {
+          const scheduleExists = element => element.frequency === body.frequency && 
+                                            element.interval.start === body.interval.start && 
+                                            element.interval.end === body.interval.end
+          
+          if (newData.schedules.length > 0 && newData.schedules.some(scheduleExists)) {
             throw new Error("Schedule already exists");
           }
           const schedules =  newData['schedules']
