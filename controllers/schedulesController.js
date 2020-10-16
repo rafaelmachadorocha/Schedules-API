@@ -1,10 +1,13 @@
 const Schedule = require('../models/Schedule')
 
 // Get schedules => /api/v1/schedules
-exports.getSchedules = (req, res, next) => {
+exports.getSchedules = async (req, res, next) => {
+
+  const availableSchedules = await Schedule.find();
   res.status(200).json({
     success: true,
-    message: 'This route will display schedules'
+    results: availableSchedules.length,
+    schedules: availableSchedules
   });
 }
 

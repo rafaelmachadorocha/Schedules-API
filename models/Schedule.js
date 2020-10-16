@@ -17,14 +17,6 @@ class Schedule {
     
   }
 
-  static async setId() {
-    await fs.readFile(filePath, 'utf-8', (err, data) => {
-      if (data === undefined) {
-        return 1
-      }
-    });
-  }
-
   static create(body) {
     return new Promise((resolve, reject) => {
       const schedule = new Schedule(body);
@@ -33,6 +25,17 @@ class Schedule {
       } else reject("Couldn't create schedule");
   });
  }
+
+ static find() {
+  return new Promise((resolve, reject) => {
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (data !== undefined) {
+          const newData = JSON.parse(data);
+          resolve(newData.schedules);
+        } else reject ([]);
+      })
+  });
+}
 
   save() {
     let body = {
@@ -45,6 +48,14 @@ class Schedule {
     }
     this.formatData(body);
     return true
+  }
+
+  static async setId() {
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+      if (data === undefined) {
+        return 1
+      }
+    });
   }
 
   async formatData(body) {
