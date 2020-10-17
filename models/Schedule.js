@@ -1,7 +1,6 @@
 const fs = require('fs');
 const filePath = 'schedules.json';
 const DateHelper = require('../helpers/dateHelper');
-const moment = require('moment');
 
 class Schedule {
   
@@ -29,7 +28,7 @@ class Schedule {
           fs.readFile(filePath, 'utf-8', (err, data) => {
             if (data !== undefined) {
               const newData = JSON.parse(data);
-              resolve(Schedule.checkDateInRange(newData.schedules, status, begin, end))
+              resolve(DateHelper.checkDateInRange(newData.schedules, status, begin, end))
             } else reject([])
           })
         }
@@ -65,44 +64,6 @@ class Schedule {
     } else if (frequency === "weekly") {
       return date;
     } return null;
-  }
-
-  static checkDateInRange(data, status, begin, end) {
-    const selectedSchedules = []
-    const beginDate = new Date(DateHelper.formatStringToDate(begin));
-    const endDate = new Date(DateHelper.formatStringToDate(end));
-    data.forEach((element) => {
-      if (element.frequency.toLowerCase() === 'at this day' && element.status.toLowerCase() === status.toLowerCase()) {
-        element.day = new Date(element.day);
-        if (element.day <= endDate && element.day >= beginDate) {
-          selectedSchedules.push(element)
-        }
-      }
-      if (element.frequency.toLowerCase() === 'weekly' && element.status.toLowerCase() === status.toLowerCase()) {
-        const diffTime = Math.abs(beginDate - endDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-        const dates = [];
-        for (let i = 0; i <= diffDays; i++) {
-          dates.push(moment(beginDate).add(i, 'day'));
-        }
-        console.log(dates)
-        dates.forEach(dateDay => {
-          if (dateDay.format('dddd').toLowerCase() === element.day.toLowerCase()) {
-            selectedSchedules.push(
-              {
-                frequency: 'at this day',
-                day: dateDay.toDate(),
-                interval: {
-                  start: element.interval.start,
-                  end: element.interval.end
-                },
-                status: element.status
-              })
-          }
-        })
-      }
-    })
-    return selectedSchedules;
   }
 
   static create(body) {
