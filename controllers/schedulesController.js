@@ -1,7 +1,5 @@
 const Schedule = require('../models/Schedule');
 const ScheduleHelper = require('../helpers/scheduleHelper');
-const ErrorHandler = require('../utils/errorHandler');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
 // Get schedule rules => /api/v1/schedules
 exports.getSchedules = async (req, res, next) => {

@@ -60,7 +60,7 @@ class Schedule {
 
   static setDate(frequency, date) {
     if (frequency === "at this day") {
-      return new Date(DateHelper.formatStringToDate(date));
+      return DateHelper.formatStringToDate(date);
     } else if (frequency === "weekly") {
       return date;
     } return null;

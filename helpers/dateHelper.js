@@ -19,8 +19,8 @@ class DateHelper {
   }
 
   static checkAtThisDay(element, status, begin, end, selectedSchedules) {
-    const beginDate = new Date(DateHelper.formatStringToDate(begin));
-    const endDate = new Date(DateHelper.formatStringToDate(end));
+    const beginDate = DateHelper.formatStringToDate(begin);
+    const endDate = DateHelper.formatStringToDate(end);
     if (element.frequency.toLowerCase() === 'at this day' && element.status.toLowerCase() === status.toLowerCase()) {
       element.day = new Date(element.day);
       if (element.day <= endDate && element.day >= beginDate) {
@@ -30,8 +30,8 @@ class DateHelper {
   }
 
   static checkWeekly(element, status, begin, end, selectedSchedules) {
-    const beginDate = new Date(DateHelper.formatStringToDate(begin));
-    const endDate = new Date(DateHelper.formatStringToDate(end));
+    const beginDate = DateHelper.formatStringToDate(begin);
+    const endDate = DateHelper.formatStringToDate(end);
     if (element.frequency.toLowerCase() === 'weekly' && element.status.toLowerCase() === status.toLowerCase()) {
       const diffTime = Math.abs(beginDate - endDate);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -56,8 +56,8 @@ class DateHelper {
   }
 
   static checkDaily(element, status, begin, end, selectedSchedules) {
-    const beginDate = new Date(DateHelper.formatStringToDate(begin));
-    const endDate = new Date(DateHelper.formatStringToDate(end));
+    const beginDate = DateHelper.formatStringToDate(begin);
+    const endDate = DateHelper.formatStringToDate(end);
     if (element.frequency.toLowerCase() === 'daily' && element.status.toLowerCase() === status.toLowerCase()) {
       const diffTime = Math.abs(beginDate - endDate);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -87,7 +87,7 @@ class DateHelper {
   }
 
   static formatStringToDate(string) {
-    return string.split('-').reverse();
+    return new Date(string.split('-').reverse());
   }
 
 }
