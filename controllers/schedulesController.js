@@ -2,7 +2,7 @@ const Schedule = require('../models/Schedule');
 const ScheduleHelper = require('../helpers/scheduleHelper');
 
 // Get schedule rules => /api/v1/schedules
-exports.getSchedules = async (req, res, next) => {
+exports.getSchedules = (req, res, next) => {
 
   const availableSchedules = Schedule.find();
   
@@ -24,7 +24,7 @@ exports.getSchedules = async (req, res, next) => {
 }
 
 //Search for avaiable schedules within range => /api/v1/schedules/:begin/:end/:status
-exports.getScheduleWithinRange = async (req, res, next) => {
+exports.getScheduleWithinRange = (req, res, next) => {
   const { begin, end, status } = req.params
   const scheduleRules = Schedule.find(status, begin, end)
   scheduleRules
@@ -64,8 +64,8 @@ exports.newSchedule = async (req, res, next) => {
 };
 
 //Delete an specific schedule rule => api/v1/job/:id
-exports.deleteSchedule = async (req, res, next) => {
-  let schedule = Schedule.findByIdAndDelete(req.params.id)
+exports.deleteSchedule = (req, res, next) => {
+  const schedule = Schedule.findByIdAndDelete(req.params.id)
   schedule.then((value) => res.status(200).json({
     success: true,
     message: 'Schedule is deleted',
