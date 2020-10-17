@@ -72,12 +72,34 @@ class Schedule {
     const beginDate = new Date(DateHelper.formatStringToDate(begin));
     const endDate = new Date(DateHelper.formatStringToDate(end));
     data.forEach((element) => {
-
-      if (element.frequency === 'at this day' && element.status === status) {
+      if (element.frequency.toLowerCase() === 'at this day' && element.status.toLowerCase() === status.toLowerCase()) {
         element.day = new Date(element.day);
         if (element.day <= endDate && element.day >= beginDate) {
           selectedSchedules.push(element)
         }
+      }
+      if (element.frequency.toLowerCase() === 'weekly' && element.status.toLowerCase() === status.toLowerCase()) {
+        const diffTime = Math.abs(beginDate - endDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+        const dates = [];
+        for (let i = 0; i <= diffDays; i++) {
+          dates.push(moment(beginDate).add(i, 'day'));
+        }
+        console.log(dates)
+        dates.forEach(dateDay => {
+          if (dateDay.format('dddd').toLowerCase() === element.day.toLowerCase()) {
+            selectedSchedules.push(
+              {
+                frequency: 'at this day',
+                day: dateDay.toDate(),
+                interval: {
+                  start: element.interval.start,
+                  end: element.interval.end
+                },
+                status: element.status
+              })
+          }
+        })
       }
     })
     return selectedSchedules;
@@ -117,33 +139,18 @@ class Schedule {
           }); 
         } else {
             let newData = JSON.parse(data);
-            if (newData.schedules.length > 0 && Schedule.scheduleExists(newData.schedules, body)) {
-              reject("Schedule already exists");
-            } else {
-                const schedules = newData['schedules'];
-                body._id = schedules[schedules.length - 1]._id + 1;
-                newData['schedules'].push(body);
-                newData = JSON.stringify(newData);
-                fs.writeFile(filePath, newData, (err) => {
-                  if (err) reject(err);
-                  resolve(body);
-                });        
-              }
-            }        
+            const schedules = newData['schedules'];
+            body._id = schedules[schedules.length - 1]._id + 1;
+            newData['schedules'].push(body);
+            newData = JSON.stringify(newData);
+            fs.writeFile(filePath, newData, (err) => {
+              if (err) reject(err);
+              resolve(body);
+            });        
+          }        
       });  
     })
   }
-
-  static scheduleExists(schedules, body) {
-    return schedules.some(element => {
-      return (element.frequency === body.frequency && element.day === body.day) ||
-             (element.frequency === 'at this day' && 
-             DateHelper.formatDateToString(new Date(element.day)) === DateHelper.formatDateToString(body.day)) ||
-             (DateHelper.formatDateToString(new Date(element.day)) === DateHelper.formatDateToString(body.day) && 
-             element.interval.start === body.interval.start && element.interval.end === body.interval.end);
-    });
-  }
-   
 } 
 
 module.exports = Schedule;

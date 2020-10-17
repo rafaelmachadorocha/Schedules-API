@@ -8,10 +8,15 @@ class ScheduleHelper {
         schedules.push({ day: formattedDate, intervals: [{ "start": rule.interval.start, "end": rule.interval.end }] });
       } else {
         const selectedElement = schedules.find(element => element['day'] === formattedDate);
-        selectedElement.intervals.push({ start: rule.interval.start, end: rule.interval.end });
+        if(!selectedElement.intervals.some(element => element.start === rule.interval.start && 
+           element.end === rule.interval.end)) {
+            selectedElement.intervals.push({ start: rule.interval.start, end: rule.interval.end });
+        }
       }
     });
-    return schedules;
+    return schedules.sort((a, b) => {
+      return new Date(DateHelper.formatStringToDate(a.day)) - new Date(DateHelper.formatStringToDate(b.day));
+    });
   }
 }
 module.exports = ScheduleHelper;
