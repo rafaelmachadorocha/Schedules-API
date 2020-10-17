@@ -1,7 +1,7 @@
-const { json } = require('body-parser');
 const fs = require('fs');
 const filePath = 'schedules.json';
 const DateHelper = require('../helpers/dateHelper');
+const moment = require('moment');
 
 class Schedule {
   
