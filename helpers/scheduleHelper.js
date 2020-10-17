@@ -1,5 +1,12 @@
 const DateHelper = require('./dateHelper');
 class ScheduleHelper {
+
+  constructor() {
+
+		throw new Error('this class cannot be instantiated.')
+		//pois se trata de uma classe que tem apenas métodos estáticos
+  }
+
   static filterSchedules(scheduleRules) {
     const schedules = [];
     scheduleRules.forEach(function (rule) {
