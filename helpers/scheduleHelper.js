@@ -12,10 +12,11 @@ class ScheduleHelper {
            element.end === rule.interval.end)) {
             selectedElement.intervals.push({ start: rule.interval.start, end: rule.interval.end });
         }
+        selectedElement.intervals.sort((a, b) => a.start - b.start);
       }
     });
     return schedules.sort((a, b) => {
-      return new Date(DateHelper.formatStringToDate(a.day)) - new Date(DateHelper.formatStringToDate(b.day));
+      new Date(DateHelper.formatStringToDate(a.day)) - new Date(DateHelper.formatStringToDate(b.day));
     });
   }
 }
