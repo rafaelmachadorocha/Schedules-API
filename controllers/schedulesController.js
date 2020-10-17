@@ -6,12 +6,23 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 // Get schedule rules => /api/v1/schedules
 exports.getSchedules = async (req, res, next) => {
 
-  const availableSchedules = await Schedule.find();
-  res.status(200).json({
-    success: true,
-    results: availableSchedules.length,
-    schedules: availableSchedules
-  });
+  const availableSchedules = Schedule.find();
+  
+  availableSchedules
+  .then((value) => {
+    res.status(200).json({
+      success: true,
+      results: value.length,
+      schedules: value
+    });
+  })
+  .catch((reason) => {
+    res.status(500).json({
+      success: false,
+      results: reason.length,
+      schedules: reason
+    })
+  })
 }
 
 //Search for avaiable schedules within range => /api/v1/schedules/:begin/:end/:status

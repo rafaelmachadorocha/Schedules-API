@@ -18,17 +18,17 @@ class Schedule {
 
   static find(status = null, begin = null, end = null) {
     return new Promise((resolve, reject) => {
-        if (!begin || !end){
+        if (!begin || !end || !status){
           fs.readFile(filePath, 'utf8', (err, data) => {
             if (data !== undefined) {
               const newData = JSON.parse(data);
               resolve(newData.schedules);
-            } else reject ([]);
+            } else reject([])
           })
         } else {
           fs.readFile(filePath, 'utf-8', (err, data) => {
             if (data !== undefined) {
-              const newData = JSON.parse(data)
+              const newData = JSON.parse(data);
               resolve(Schedule.checkDateInRange(newData.schedules, status, begin, end))
             } else reject([])
           })
