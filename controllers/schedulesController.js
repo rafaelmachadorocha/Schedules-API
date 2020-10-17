@@ -14,22 +14,24 @@ exports.getSchedules = async (req, res, next) => {
   });
 }
 
-//Search for avaiable schedules within range => /api/v1/schedules/:begin/:end
+//Search for avaiable schedules within range => /api/v1/schedules/:begin/:end/:status
 exports.getScheduleWithinRange = async (req, res, next) => {
-  const { begin, end } = req.params
-  const scheduleRules = Schedule.find(begin, end)
-  scheduleRules.then((value) => {
-    const schedules = ScheduleHelper.filterAvailableSchedules(value);
+  const { begin, end, status } = req.params
+  const scheduleRules = Schedule.find(status, begin, end)
+  scheduleRules
+  .then((value) => {
+    const schedules = ScheduleHelper.filterSchedules(value);
     res.status(200).json({
       success: true,
       results: schedules.length,
-      "available-schedules": schedules
+      schedules: schedules
     });
-  }).catch((reason) => {
+  })
+  .catch((reason) => {
     res.status(200).json({
       sucess: false,
       results: reason.length,
-      "available-schedules": reason
+      schedules: reason
     })
   })
   

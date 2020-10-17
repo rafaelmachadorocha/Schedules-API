@@ -7,15 +7,16 @@ class Schedule {
   
   constructor(attributes = {}){
     this._id = 1;
-    this.frequency = attributes.frequency || "at this day"
-    this.day = Schedule.setDate(this.frequency, attributes.day)
+    this.frequency = attributes.frequency || "at this day";
+    this.day = Schedule.setDate(this.frequency, attributes.day);
+    this.status = attributes.status;
     this.interval = {
       start: attributes.interval.start,
       end: attributes.interval.end
     };
   }
 
-  static find(begin = null, end = null) {
+  static find(status = null, begin = null, end = null) {
     return new Promise((resolve, reject) => {
         if (!begin || !end){
           fs.readFile(filePath, 'utf8', (err, data) => {
@@ -28,7 +29,7 @@ class Schedule {
           fs.readFile(filePath, 'utf-8', (err, data) => {
             if (data !== undefined) {
               const newData = JSON.parse(data)
-              resolve(Schedule.checkDateInRange(newData.schedules, begin, end))
+              resolve(Schedule.checkDateInRange(newData.schedules, status, begin, end))
             } else reject([])
           })
         }
@@ -66,13 +67,13 @@ class Schedule {
     } return null;
   }
 
-  static checkDateInRange(data, begin, end) {
+  static checkDateInRange(data, status, begin, end) {
     const selectedSchedules = []
     const beginDate = new Date(DateHelper.formatStringToDate(begin));
     const endDate = new Date(DateHelper.formatStringToDate(end));
     data.forEach((element) => {
 
-      if (element.frequency === 'at this day') {
+      if (element.frequency === 'at this day' && element.status === status) {
         element.day = new Date(element.day);
         if (element.day <= endDate && element.day >= beginDate) {
           selectedSchedules.push(element)
@@ -95,9 +96,10 @@ class Schedule {
       interval: {
         start: this.interval.start,
         end: this.interval.end
-      }
+      },
+      status: this.status
     }
-    return this.formatData(body).then(v => v, r => r)
+    return this.formatData(body).then(v => v, r => r);
   }
   
   formatData(body) {
@@ -108,26 +110,23 @@ class Schedule {
           body._id = 1;
           newData['schedules'] = [];
           newData['schedules'].push(body);
-          newData = JSON.stringify(newData)
+          newData = JSON.stringify(newData);
           fs.writeFile(filePath, newData, (err) => {
             if (err) throw err;
-            resolve(body)
+            resolve(body);
           }); 
         } else {
             let newData = JSON.parse(data);
-            if(!newData.hasOwnProperty('schedules')) {
-              newData['schedules'] = [];
-            }
             if (newData.schedules.length > 0 && Schedule.scheduleExists(newData.schedules, body)) {
-              reject("Schedule already exists")
+              reject("Schedule already exists");
             } else {
-                const schedules =  newData['schedules']
-                body._id = schedules[schedules.length - 1]._id + 1
+                const schedules = newData['schedules'];
+                body._id = schedules[schedules.length - 1]._id + 1;
                 newData['schedules'].push(body);
                 newData = JSON.stringify(newData);
                 fs.writeFile(filePath, newData, (err) => {
                   if (err) reject(err);
-                  resolve(body)  
+                  resolve(body);
                 });        
               }
             }        

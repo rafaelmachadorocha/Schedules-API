@@ -1,6 +1,6 @@
 const DateHelper = require('./dateHelper');
 class ScheduleHelper {
-  static filterAvailableSchedules(scheduleRules) {
+  static filterSchedules(scheduleRules) {
     const schedules = [];
     scheduleRules.forEach(function (rule) {
       const formattedDate = DateHelper.formatDateToString(rule.day);

@@ -5,7 +5,7 @@ const { getSchedules, newSchedule, getScheduleWithinRange, deleteSchedule } = re
 
 router.route('/schedules').get(getSchedules);
 
-router.route('/schedules/:begin/:end').get(getScheduleWithinRange);
+router.route('/schedules/:begin/:end/:status').get(getScheduleWithinRange);
 
 router.route('/schedules/new').post(newSchedule);
 
