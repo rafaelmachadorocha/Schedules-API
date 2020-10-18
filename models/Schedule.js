@@ -91,7 +91,7 @@ class Schedule {
     if (body.frequency.toLowerCase() === 'weekly' && !days.includes(body.day.toLowerCase())) {
       return 'The specified day is not a valid day of the week';
     } else if (body.frequency === 'at this day' && !dateRegex.test(DateHelper.formatDateToString(body.day))) {
-      return 'If a frequency if not defined, the date must be in DD/MM/YYYY format';
+      return 'If a frequency if not defined, the date must be in DD-MM-YYYY format';
     }
     return "";
   }
