@@ -219,7 +219,7 @@
 					"response": []
 				}
 			],
-			"description": "All schedules related possible requisitions",
+			"description": "All schedules related possible requests",
 			"event": [
 				{
 					"listen": "prerequest",
