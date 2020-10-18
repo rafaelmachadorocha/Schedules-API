@@ -84,6 +84,29 @@ class Schedule {
     }
     return this.formatData(body).then(v => v, r => r);
   }
+
+  static validatesBody(body) {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const dateRegex = /^\d{2}-[01][0-9]-\d{4}$/;
+    if (body.frequency.toLowerCase() === 'weekly' && !days.includes(body.day.toLowerCase())) {
+      return 'The specified day is not a valid day of the week';
+    } else if (body.frequency === 'at this day' && !dateRegex.test(DateHelper.formatDateToString(body.day))) {
+      return 'If a frequency if not defined, the date must be in DD/MM/YYYY format';
+    }
+    return "";
+  }
+
+  static writeFile(body, data, resolve, reject) {
+    const validation = Schedule.validatesBody(body);
+    if (validation) {
+      reject(validation);
+    } else {
+      fs.writeFile(filePath, data, (err) => {
+        if (err) throw err;
+        resolve(body);
+      });
+    } 
+  }
   
   formatData(body) {
     return new Promise((resolve, reject) => {
@@ -94,24 +117,19 @@ class Schedule {
           newData['schedules'] = [];
           newData['schedules'].push(body);
           newData = JSON.stringify(newData);
-          fs.writeFile(filePath, newData, (err) => {
-            if (err) throw err;
-            resolve(body);
-          }); 
+          Schedule.writeFile(body, newData, resolve, reject);
         } else {
             let newData = JSON.parse(data);
             const schedules = newData['schedules'];
             body._id = schedules[schedules.length - 1]._id + 1;
             newData['schedules'].push(body);
             newData = JSON.stringify(newData);
-            fs.writeFile(filePath, newData, (err) => {
-              if (err) reject(err);
-              resolve(body);
-            });        
-          }        
-      });  
-    })
+            Schedule.writeFile(body, newData, resolve, reject);
+        }        
+      });        
+    });  
   }
-} 
+}
+ 
 
 module.exports = Schedule;

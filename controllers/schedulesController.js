@@ -3,9 +3,7 @@ const ScheduleHelper = require('../helpers/scheduleHelper');
 
 // Get schedule rules => /api/v1/schedules
 exports.getSchedules = (req, res, next) => {
-
   const availableSchedules = Schedule.find();
-  
   availableSchedules
   .then((value) => {
     res.status(200).json({
@@ -49,18 +47,17 @@ exports.getScheduleWithinRange = (req, res, next) => {
 
 //Create a schedule rule => /api/v1/schedules/new
 exports.newSchedule = async (req, res, next) => {
- const response = await Schedule.create(req.body);
- if(typeof(response) === 'object') {
+  const response = await Schedule.create(req.body);
+  if(typeof(response) === 'object') {
   res.status(200).json({
     success: true,
     message: 'Schedule added',
     schedule: response
   });
- } else res.status(500).json({
-   sucess: false,
-   message: response
- })
-  
+  } else res.status(500).json({
+    sucess: false,
+    message: response
+  })  
 };
 
 //Delete an specific schedule rule => api/v1/job/:id
