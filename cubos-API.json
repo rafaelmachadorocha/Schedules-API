@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "7efe7650-a6fa-4b4e-9d8f-6bd1617f5cb3",
+		"name": "cubos-challenge API",
+		"description": "This is a back-end API implemented in Node.js for Cubos Academy admission challenge.\r\n\r\nAs a user, I can:\r\n\r\n- Register schedule rules\r\n- Delete schedule rule\r\n- List schedule rules\r\n- List available or occupied schedules within a range",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "schedules",
+			"item": [
+				{
+					"name": "Get all schedule rules with ids",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedules/",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedules",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an specific interval rule",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedules/:begin/:end/:status",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedules",
+								":begin",
+								":end",
+								":status"
+							],
+							"variable": [
+								{
+									"key": "begin",
+									"value": "18-10-2020",
+									"description": "the begin of a given date interval"
+								},
+								{
+									"key": "end",
+									"value": "29-10-2020",
+									"description": "the end of a given date interval"
+								},
+								{
+									"key": "status",
+									"value": "available",
+									"description": "set it to 'available' or 'occupied' to get related schedules"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a \"daily\" schedule rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{   \r\n    \"frequency\": \"daily\",\r\n    \"interval\": {\r\n        \"start\": \"10:30\",\r\n        \"end\": \"09:30\" \r\n        },\r\n    \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedules/new",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedules",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a \"weekly\" schedule rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{   \r\n    \"frequency\": \"weekly\",\r\n    \"day\": \"Friday\",\r\n    \"interval\": {\r\n        \"start\": \"17:30\",\r\n        \"end\": \"18:30\" \r\n        },\r\n    \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedules/new",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedules",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an \"at this day\" schedule rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{   \r\n    \"day\": \"02-10-2020\",\r\n    \"interval\": {\r\n        \"start\": \"17:30\",\r\n        \"end\": \"18:30\" \r\n        },\r\n    \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedules/new",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedules",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a schedule rule",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{DOMAIN}}/api/v1/schedule/:id",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"schedule",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12",
+									"description": "the schedue rule id to delete"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "All schedules related possible requisitions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e9a307ae-9dae-4832-ad81-140c96264ba0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "395b37d5-2f80-46ad-b758-e01f068d5a96",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "baccbbba-95c7-455b-9d3c-03b964efe7cf",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6b4aa3cc-46bb-4643-867d-fac718098eda",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
