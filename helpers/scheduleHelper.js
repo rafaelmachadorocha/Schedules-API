@@ -1,3 +1,4 @@
+const { formatStringToDate } = require('./dateHelper');
 const DateHelper = require('./dateHelper');
 class ScheduleHelper {
 
@@ -22,18 +23,13 @@ class ScheduleHelper {
         selectedElement.intervals.sort((a, b) => Number.parseInt(a.start.match(/\d{2}/), 10) - Number.parseInt(b.start.match(/\d{2}/)), 10);
       }
     });
-    
-    const filteredSchedules = schedules.filter(element => {
-
-      return !schedules.some(innerElement => {
-        innerElement === element;
-      })
-
-    })
-
-    return schedules.sort((a, b) => {
-      DateHelper.formatStringToDate(a.day) - DateHelper.formatStringToDate(b.day);
+    console.log('teste');
+    let uniqueSchedules = schedules.filter(element => {
+        return schedules.some(innerElement => {
+          return innerElement.day === element.day;
+        });
     });
+    return uniqueSchedules.sort((a, b) => DateHelper.formatStringToDate(a.day) - DateHelper.formatStringToDate(b.day))
   }
 }
 module.exports = ScheduleHelper;
