@@ -24,12 +24,10 @@ class ScheduleHelper {
     });
     
     const filteredSchedules = schedules.filter(element => {
-
       return !schedules.some(innerElement => {
         innerElement === element;
-      })
-
-    })
+      });
+    });
 
     return schedules.sort((a, b) => {
       DateHelper.formatStringToDate(a.day) - DateHelper.formatStringToDate(b.day);
