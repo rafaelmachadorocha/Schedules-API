@@ -23,7 +23,6 @@ class ScheduleHelper {
         selectedElement.intervals.sort((a, b) => Number.parseInt(a.start.match(/\d{2}/), 10) - Number.parseInt(b.start.match(/\d{2}/)), 10);
       }
     });
-    console.log('teste');
     let uniqueSchedules = schedules.filter(element => {
         return schedules.some(innerElement => {
           return innerElement.day === element.day;
