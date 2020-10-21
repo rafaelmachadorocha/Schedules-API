@@ -23,7 +23,7 @@ class ScheduleHelper {
       }
     });
     return schedules.sort((a, b) => {
-      DateHelper.formatStringToDate(a.day) - DateHelper.formatStringToDate(b.day);
+      return DateHelper.formatStringToDate(a.day) - DateHelper.formatStringToDate(b.day);
     });
   }
 }
