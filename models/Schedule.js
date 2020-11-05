@@ -121,7 +121,9 @@ class Schedule {
         } else {
             let newData = JSON.parse(data);
             const schedules = newData['schedules'];
-            body._id = schedules[schedules.length - 1]._id + 1;
+            if(schedules.length > 0) {
+              body._id = schedules[schedules.length - 1]._id + 1;
+            } else body._id = 1;
             newData['schedules'].push(body);
             newData = JSON.stringify(newData);
             Schedule.writeFile(body, newData, resolve, reject);
