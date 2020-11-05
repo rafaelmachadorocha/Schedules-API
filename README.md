@@ -1,5 +1,5 @@
 
-## This is a back-end API implemented in Node.js
+## This is a back-end API implemented in Node.js to manage schedules
 
 As a user, I can:
 
