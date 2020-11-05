@@ -13,4 +13,4 @@ As a user, I can:
 
 
 
-To see more detailed examples do requests access [Postman Schedules Documentation](https://documenter.getpostman.com/view/13107448/TVRrVQaC)
+To see more detailed examples of requests access [Postman Schedules Documentation](https://documenter.getpostman.com/view/13107448/TVRrVQaC)
