@@ -1,1 +1,1 @@
-{"schedules":[]}
+{"schedules":[{"_id":1,"frequency":"daily","day":null,"interval":{"start":"09:30","end":"10:30"},"status":"available"},{"_id":2,"frequency":"at this day","day":"2020-10-02T03:00:00.000Z","interval":{"start":"17:30","end":"18:30"},"status":"available"}]}
